@@ -1,13 +1,12 @@
 import React from 'react';
 import {
-	Text, View, TouchableOpacity, StyleSheet
+	Text, View, TouchableOpacity, Image, StyleSheet
 } from 'react-native';
 import PropTypes from 'prop-types';
 
 import I18n from '../../../i18n';
 import sharedStyles from '../../Styles';
 import { themes } from '../../../constants/colors';
-import { CustomIcon } from '../../../lib/Icons';
 
 const styles = StyleSheet.create({
 	container: {
@@ -16,8 +15,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	button: {
-		flexDirection: 'row',
-		alignItems: 'center'
+		flexDirection: 'row'
 	},
 	title: {
 		fontSize: 14,
@@ -34,7 +32,8 @@ const styles = StyleSheet.create({
 		height: 9
 	},
 	upsideDown: {
-		transform: [{ scaleY: -1 }]
+		transform: [{ scaleY: -1 }],
+		marginTop: 4
 	}
 });
 
@@ -57,17 +56,12 @@ const Header = React.memo(({
 			onPress={onPress}
 			testID='rooms-list-header-server-dropdown-button'
 			style={styles.container}
-			// disabled={connecting || isFetching}
+			disabled={connecting || isFetching}
 		>
 			<HeaderTitle connecting={connecting} isFetching={isFetching} theme={theme} />
 			<View style={styles.button}>
-				<Text style={[styles.server, { color: themes[theme].headerTintColor }]} numberOfLines={1}>{serverName}</Text>
-				<CustomIcon
-					name='chevron-down'
-					color={themes[theme].headerTintColor}
-					style={[showServerDropdown && styles.upsideDown]}
-					size={18}
-				/>
+				<Text style={[styles.server, { color: themes[theme].headerTintColor }]}>{serverName}</Text>
+				{/* <Image style={[styles.disclosure, showServerDropdown && styles.upsideDown]} source={{ uri: 'disclosure_indicator_server' }} /> */}
 			</View>
 		</TouchableOpacity>
 	</View>

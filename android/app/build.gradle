@@ -135,7 +135,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "chat.rocket.reactnative"
+        applicationId "com.oliveuc.chatapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode VERSIONCODE as Integer
@@ -147,11 +147,11 @@ android {
 
     signingConfigs {
         release {
-            if (project.hasProperty('KEYSTORE')) {
-                storeFile file(KEYSTORE)
-                storePassword KEYSTORE_PASSWORD
-                keyAlias KEY_ALIAS
-                keyPassword KEY_PASSWORD
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
             }
         }
     }

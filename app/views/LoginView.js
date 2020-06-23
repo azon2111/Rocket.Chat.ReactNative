@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-	Text, View, StyleSheet, Keyboard, Alert
+	Text, View, StyleSheet, Keyboard, Alert, ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
 import equal from 'deep-equal';
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 
 class LoginView extends React.Component {
 	static navigationOptions = ({ navigation, screenProps }) => {
-		const title = navigation.getParam('title', 'Rocket.Chat');
+		const title = navigation.getParam('title', 'OliveUC');
 		return {
 			...themedHeader(screenProps.theme),
 			title,
@@ -84,7 +84,7 @@ class LoginView extends React.Component {
 		};
 	}
 
-	UNSAFE_componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps) {
 		const { error } = this.props;
 		if (nextProps.failure && !equal(error, nextProps.error)) {
 			Alert.alert(I18n.t('Oops'), I18n.t('Login_error'));
@@ -129,7 +129,7 @@ class LoginView extends React.Component {
 		} = this.props;
 
 		if (!Accounts_ShowFormLogin) {
-			return null;
+			return <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><ActivityIndicator size="large" color="#000" /><Text>Fetching data...</Text></View>;
 		}
 
 		return (
@@ -201,7 +201,7 @@ class LoginView extends React.Component {
 	render() {
 		const { Accounts_ShowFormLogin, theme } = this.props;
 		return (
-			<FormContainer theme={theme} testID='login-view'>
+			<FormContainer theme={theme}>
 				<FormContainerInner>
 					<LoginServices separator={Accounts_ShowFormLogin} />
 					{this.renderUserForm()}

@@ -4,7 +4,11 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import * as FileSystem from 'expo-file-system';
 import Orientation from 'react-native-orientation-locker';
+import {
+	serverRequest
+} from '../../actions/server';
 
 import { appStart as appStartAction } from '../../actions';
 import I18n from '../../i18n';
@@ -32,6 +36,9 @@ class OnboardingView extends React.Component {
 		if (!isTablet) {
 			Orientation.lockToPortrait();
 		}
+		this.state = {
+			certificate: null
+		}
 	}
 
 	shouldComponentUpdate(nextProps) {
@@ -52,9 +59,53 @@ class OnboardingView extends React.Component {
 		return false;
 	}
 
-	connectServer = () => {
+	uriToPath = uri => uri.replace('file://', '');
+
+	completeUrl = (url) => {
+		const parsedUrl = parse(url, true);
+		if (parsedUrl.auth.length) {
+			url = parsedUrl.origin;
+		}
+
+		url = url && url.replace(/\s/g, '');
+
+		if (/^(\w|[0-9-_]){3,}$/.test(url)
+			&& /^(htt(ps?)?)|(loca((l)?|(lh)?|(lho)?|(lhos)?|(lhost:?\d*)?)$)/.test(url) === false) {
+			url = `${ url }.rocket.chat`;
+		}
+
+		if (/^(https?:\/\/)?(((\w|[0-9-_])+(\.(\w|[0-9-_])+)+)|localhost)(:\d+)?$/.test(url)) {
+			if (/^localhost(:\d+)?/.test(url)) {
+				url = `http://${ url }`;
+			} else if (/^https?:\/\//.test(url) === false) {
+				url = `https://${ url }`;
+			}
+		}
+
+		return url.replace(/\/+$/, '').replace(/\\/g, '/');
+	}
+
+	connectServer = async () => {
 		const { navigation } = this.props;
-		navigation.navigate('NewServerView');
+		const { certificate } = this.state;
+		const { connectServer } = this.props;
+		let cert = null;
+
+		if (certificate) {
+			const certificatePath = `${ FileSystem.documentDirectory }/${ certificate.name }`;
+			try {
+				await FileSystem.copyAsync({ from: certificate.path, to: certificatePath });
+			} catch (e) {
+				log(e);
+			}
+			cert = {
+				path: this.uriToPath(certificatePath), // file:// isn't allowed by obj-C
+				password: certificate.password
+			};
+		}
+
+		connectServer("https://oliveuc.oliveitky.com", cert);
+		navigation.navigate('LoginView');
 	}
 
 	createWorkspace = async() => {
@@ -68,7 +119,7 @@ class OnboardingView extends React.Component {
 	render() {
 		const { theme } = this.props;
 		return (
-			<FormContainer theme={theme} testID='onboarding-view'>
+			<FormContainer theme={theme}>
 				<FormContainerInner>
 					<Image style={styles.onboarding} source={{ uri: 'logo' }} fadeDuration={0} />
 					<Text style={[styles.title, { color: themes[theme].titleText }]}>{I18n.t('Onboarding_title')}</Text>
@@ -76,20 +127,18 @@ class OnboardingView extends React.Component {
 					<Text style={[styles.description, { color: themes[theme].auxiliaryText }]}>{I18n.t('Onboarding_description')}</Text>
 					<View style={styles.buttonsContainer}>
 						<Button
-							title={I18n.t('Onboarding_join_workspace')}
+							title={'Get Started'}
 							type='primary'
 							onPress={this.connectServer}
 							theme={theme}
-							testID='join-workspace'
 						/>
-						<Button
+						{/* <Button
 							title={I18n.t('Create_a_new_workspace')}
 							type='secondary'
 							backgroundColor={themes[theme].chatComponentBackground}
 							onPress={this.createWorkspace}
 							theme={theme}
-							testID='create-workspace-button'
-						/>
+						/> */}
 					</View>
 				</FormContainerInner>
 			</FormContainer>
@@ -98,7 +147,8 @@ class OnboardingView extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-	appStart: root => dispatch(appStartAction(root))
+	appStart: root => dispatch(appStartAction(root)),
+	connectServer: (server, certificate) => dispatch(serverRequest(server, certificate))
 });
 
 export default connect(null, mapDispatchToProps)(withTheme(OnboardingView));
