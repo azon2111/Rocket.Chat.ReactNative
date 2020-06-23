@@ -308,7 +308,11 @@ export default {
 	Notification_Preferences: '通知設定',
 	Offline: 'オフライン',
 	Oops: 'おっと！',
+<<<<<<< HEAD
 	Onboarding_title: 'Rocket.Chatへようこそ',
+=======
+	Onboarding_title: 'OliveUCへようこそ',
+>>>>>>> olive-develop
 	Online: 'オンライン',
 	Only_authorized_users_can_write_new_messages:
     '承認されたユーザーだけが新しいメッセージを書き込めます',

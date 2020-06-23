@@ -5,6 +5,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import RNUserDefaults from 'rn-user-defaults';
 import { sha256 } from 'js-sha256';
 
+<<<<<<< HEAD
+=======
+import store from '../lib/createStore';
+>>>>>>> olive-develop
 import database from '../lib/database';
 import { isIOS } from './deviceInfo';
 import EventEmitter from './events';
@@ -12,6 +16,10 @@ import {
 	LOCAL_AUTHENTICATE_EMITTER, LOCKED_OUT_TIMER_KEY, ATTEMPTS_KEY, PASSCODE_KEY, CHANGE_PASSCODE_EMITTER
 } from '../constants/localAuthentication';
 import I18n from '../i18n';
+<<<<<<< HEAD
+=======
+import { setLocalAuthenticated } from '../actions/login';
+>>>>>>> olive-develop
 
 export const saveLastLocalAuthenticationSession = async(server, serverRecord) => {
 	const serversDB = database.servers;
@@ -100,6 +108,12 @@ export const localAuthenticate = async(server) => {
 
 	// if screen lock is enabled
 	if (serverRecord?.autoLock) {
+<<<<<<< HEAD
+=======
+		// set isLocalAuthenticated to false
+		store.dispatch(setLocalAuthenticated(false));
+
+>>>>>>> olive-develop
 		// Make sure splash screen has been hidden
 		RNBootSplash.hide();
 
@@ -123,6 +137,12 @@ export const localAuthenticate = async(server) => {
 
 				// Authenticate
 				await openModal(hasBiometry);
+<<<<<<< HEAD
+=======
+
+				// set isLocalAuthenticated to true
+				store.dispatch(setLocalAuthenticated(true));
+>>>>>>> olive-develop
 			}
 		}
 

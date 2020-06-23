@@ -206,8 +206,13 @@ export default {
 	In_App_and_Desktop_Alert_info: 'Laat een banner bovenaan het scherm zien als de app open is en geeft een notificatie op de desktop',
 	Invisible: 'Onzichtbaar',
 	Invite: 'Nodig uit',
+<<<<<<< HEAD
 	is_a_valid_RocketChat_instance: 'is een geldige Rocket.Chat instantie',
 	is_not_a_valid_RocketChat_instance: 'is geen geldige Rocket.Chat instantie',
+=======
+	is_a_valid_RocketChat_instance: 'is een geldige OliveUC instantie',
+	is_not_a_valid_RocketChat_instance: 'is geen geldige OliveUC instantie',
+>>>>>>> olive-develop
 	is_typing: 'is aan het typen',
 	Invalid_or_expired_invite_token: 'Ongeldig of verlopen uitnodigingstoken',
 	Invalid_server_version: 'De server die je probeert te bereiken gebruikt een versie die niet meer door de app ondersteunt wordt: {{currentVersion}}.\n\nMinimale versienummer {{minVersion}}',
@@ -268,7 +273,11 @@ export default {
 	No_Reactions: 'Geen reacties',
 	No_Read_Receipts: 'Geen leesbevestiging',
 	Not_logged: 'Niet gelogged',
+<<<<<<< HEAD
 	Not_RC_Server: 'Dit is geen Rocket.Chat server.\n{{contact}}',
+=======
+	Not_RC_Server: 'Dit is geen OliveUC server.\n{{contact}}',
+>>>>>>> olive-develop
 	Nothing: 'Niets',
 	Nothing_to_save: 'Niets om op te slaan!',
 	Notify_active_in_this_room: 'Bericht de actieve gebruikers in deze kamer',
@@ -278,7 +287,11 @@ export default {
 	Notification_Preferences: 'Notificatievoorkeuren',
 	Offline: 'Offline',
 	Oops: 'Oeps!',
+<<<<<<< HEAD
 	Onboarding_title: 'Welkom bij Rocket.Chat',
+=======
+	Onboarding_title: 'Welkom bij OliveUC',
+>>>>>>> olive-develop
 	Online: 'Online',
 	Only_authorized_users_can_write_new_messages: 'Alleen gebruikers met toestemming mogen nieuwe berichten maken',
 	Open_emoji_selector: 'Open de emoji selector',
@@ -459,7 +472,11 @@ export default {
 	you_were_mentioned: 'je bent vermeld',
 	you: 'jij',
 	You: 'Jij',
+<<<<<<< HEAD
 	You_need_to_access_at_least_one_RocketChat_server_to_share_something: 'Je moet minimaal toegang hebben tot 1 Rocket.Chat server om iets te delen.',
+=======
+	You_need_to_access_at_least_one_RocketChat_server_to_share_something: 'Je moet minimaal toegang hebben tot 1 OliveUC server om iets te delen.',
+>>>>>>> olive-develop
 	Your_certificate: 'Jouw Certificaat',
 	Your_invite_link_will_expire_after__usesLeft__uses: 'Je uitnodigingslink wordt ongeldig over {{usesLeft}} keer.',
 	Your_invite_link_will_expire_on__date__or_after__usesLeft__uses: 'Je uitnodigingslink wordt ongeldig op {{date}} of na{{usesLeft}} keer.',

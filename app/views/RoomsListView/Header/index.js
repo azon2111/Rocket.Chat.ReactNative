@@ -61,9 +61,10 @@ class RoomsListHeaderView extends PureComponent {
 			setTimeout(() => {
 				open();
 			}, 300);
-		} else {
-			open();
-		}
+		} 
+		// else {
+		// 	open();
+		// }
 	}
 
 	render() {

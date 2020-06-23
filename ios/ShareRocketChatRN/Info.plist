@@ -17,7 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
+<<<<<<< HEAD
 	<string>4.7.0</string>
+=======
+	<string>4.8.0</string>
+>>>>>>> olive-develop
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSAppTransportSecurity</key>

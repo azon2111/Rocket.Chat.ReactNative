@@ -83,7 +83,11 @@ const ChangePasscodeView = React.memo(({ theme }) => {
 			{!data?.force
 				? (
 					<Touchable onPress={onCancel} style={styles.close}>
+<<<<<<< HEAD
 						<CustomIcon name='cross' color={themes[theme].passcodePrimary} size={30} />
+=======
+						<CustomIcon name='Cross' color={themes[theme].passcodePrimary} size={30} />
+>>>>>>> olive-develop
 					</Touchable>
 				)
 				: null}

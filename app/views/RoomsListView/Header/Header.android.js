@@ -16,8 +16,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		flexDirection: 'row',
-		alignItems: 'center',
-		marginRight: 64
+		alignItems: 'center'
 	},
 	server: {
 		fontSize: 20,
@@ -69,15 +68,15 @@ const Header = React.memo(({
 				{connecting ? <Text style={[styles.updating, titleColorStyle]}>{I18n.t('Connecting')}</Text> : null}
 				{isFetching ? <Text style={[styles.updating, titleColorStyle]}>{I18n.t('Updating')}</Text> : null}
 				<View style={styles.button}>
-					<Text style={[styles.server, isFetching && styles.serverSmall, titleColorStyle]} numberOfLines={1}>{serverName}</Text>
-					<Image
+					<Text style={[styles.server, isFetching && styles.serverSmall, titleColorStyle]}>{serverName}</Text>
+					{/* <Image
 						style={[
 							styles.disclosure,
 							showServerDropdown && styles.upsideDown,
 							{ tintColor: themes[theme].headerTitleColor }
 						]}
 						source={{ uri: 'disclosure_indicator_server' }}
-					/>
+					/> */}
 				</View>
 			</TouchableOpacity>
 		</View>

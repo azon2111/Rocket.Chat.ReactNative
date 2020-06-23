@@ -155,7 +155,11 @@ class ShareView extends React.Component {
 			? <Image source={{ isStatic: true, uri: fileInfo.path }} style={styles.mediaImage} />
 			: (
 				<View style={styles.mediaIconContainer}>
+<<<<<<< HEAD
 					<CustomIcon name='file-generic' style={styles.mediaIcon} />
+=======
+					<CustomIcon name='clip' style={styles.mediaIcon} />
+>>>>>>> olive-develop
 				</View>
 			);
 

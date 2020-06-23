@@ -62,7 +62,11 @@ class ShareListView extends React.Component {
 			headerLeft: searching
 				? (
 					<CustomHeaderButtons left>
+<<<<<<< HEAD
 						<Item title='cancel' iconName='cross' onPress={cancelSearch} />
+=======
+						<Item title='cancel' iconName='Cross' onPress={cancelSearch} />
+>>>>>>> olive-develop
 					</CustomHeaderButtons>
 				)
 				: (
@@ -441,7 +445,11 @@ class ShareListView extends React.Component {
 				}
 				<View style={[styles.container, styles.centered, { backgroundColor: themes[theme].auxiliaryBackground }]}>
 					<Text style={[styles.title, { color: themes[theme].titleText }]}>{I18n.t(error)}</Text>
+<<<<<<< HEAD
 					<CustomIcon name='circle-cross' size={120} color={themes[theme].dangerColor} />
+=======
+					<CustomIcon name='cancel' size={120} color={themes[theme].dangerColor} />
+>>>>>>> olive-develop
 					<Text style={[styles.fileMime, { color: themes[theme].titleText }]}>{ file.mime }</Text>
 				</View>
 			</View>

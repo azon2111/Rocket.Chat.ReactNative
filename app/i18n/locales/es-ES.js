@@ -201,8 +201,13 @@ export default {
 	In_App_and_Desktop_Alert_info: 'Muestra un banner en la parte superior de la pantalla cuando la aplicación está abierta y muestra una notificación en el escritorio',
 	Invisible: 'Invisible',
 	Invite: 'Invitar',
+<<<<<<< HEAD
 	is_a_valid_RocketChat_instance: 'es una instancia válida Rocket.Chat',
 	is_not_a_valid_RocketChat_instance: 'no es una instancia válida Rocket.Chat',
+=======
+	is_a_valid_RocketChat_instance: 'es una instancia válida OliveUC',
+	is_not_a_valid_RocketChat_instance: 'no es una instancia válida OliveUC',
+>>>>>>> olive-develop
 	is_typing: 'escribiendo',
 	Invalid_server_version: 'El servidor que intentas conectar está usando una versión que ya no es soportada por la aplicación : {{currentVersion}}. Requerimos una versión {{minVersion}}.',
 	Join: 'Conectar',
@@ -257,7 +262,11 @@ export default {
 	No_Reactions: 'No hay reacciones',
 	No_Read_Receipts: 'No hay confirmaciones de lectura',
 	Not_logged: 'No logueado',
+<<<<<<< HEAD
 	Not_RC_Server: 'Esto no es un servidor de Rocket.Chat.\n{{contact}}',
+=======
+	Not_RC_Server: 'Esto no es un servidor de OliveUC.\n{{contact}}',
+>>>>>>> olive-develop
 	Nothing: 'Nada',
 	Nothing_to_save: 'No hay nada para guardar!',
 	Notify_active_in_this_room: 'Notificar usuarios activos en esta sala',
@@ -267,7 +276,11 @@ export default {
 	Notification_Preferences: 'Configuración de notificaciones',
 	Offline: 'Sin conexión',
 	Oops: 'Oops!',
+<<<<<<< HEAD
 	Onboarding_title: 'Bienvenido a Rocket.Chat',
+=======
+	Onboarding_title: 'Bienvenido a OliveUC',
+>>>>>>> olive-develop
 	Online: 'Conectado',
 	Only_authorized_users_can_write_new_messages: 'Sólo pueden escribir mensajes usuarios autorizados',
 	Open_emoji_selector: 'Abrir selector de emojis',
@@ -436,7 +449,11 @@ export default {
 	you_were_mentioned: 'has sido mencionado',
 	you: 'tú',
 	You: 'Tú',
+<<<<<<< HEAD
 	You_need_to_access_at_least_one_RocketChat_server_to_share_something: 'Necesita acceder al menos a un servidor Rocket.Chat para compartir algo.',
+=======
+	You_need_to_access_at_least_one_RocketChat_server_to_share_something: 'Necesita acceder al menos a un servidor OliveUC para compartir algo.',
+>>>>>>> olive-develop
 	Your_certificate: 'Tu certificado',
 	Version_no: 'Versión: {{version}}',
 	You_will_not_be_able_to_recover_this_message: 'No podrás recuperar este mensaje!',

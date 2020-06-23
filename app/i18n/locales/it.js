@@ -206,8 +206,13 @@ export default {
 	In_App_and_Desktop_Alert_info: 'Mostra una notifica in cima allo schermo quando l\'app è aperta, e mostra una notifica sul desktop',
 	Invisible: 'Invisibile',
 	Invite: 'Invita',
+<<<<<<< HEAD
 	is_a_valid_RocketChat_instance: 'è un\'istanza di Rocket.Chat valida',
 	is_not_a_valid_RocketChat_instance: 'non è una valida istanza di Rocket.Chat',
+=======
+	is_a_valid_RocketChat_instance: 'è un\'istanza di OliveUC valida',
+	is_not_a_valid_RocketChat_instance: 'non è una valida istanza di OliveUC',
+>>>>>>> olive-develop
 	is_typing: 'sta scrivendo',
 	Invalid_or_expired_invite_token: 'Token di invito non valido o scaduto',
 	Invalid_server_version: 'Il server a cui stai cercando di connetterti sta utilizzando una versione non più supportata dall\'app: {{currentVersion}}.\n\nVersione minima richiesta: {{minVersion}}',
@@ -242,7 +247,11 @@ export default {
 	messages: 'messaggi',
 	Messages: 'Messaggi',
 	Message_Reported: 'Messaggio segnalato',
+<<<<<<< HEAD
 	Microphone_Permission_Message: 'Rocket.Chat richiede l\'accesso al microfono per inviare messaggi audio.',
+=======
+	Microphone_Permission_Message: 'OliveUC richiede l\'accesso al microfono per inviare messaggi audio.',
+>>>>>>> olive-develop
 	Microphone_Permission: 'Permesso microfono',
 	Mute: 'Silenzia',
 	muted: 'silenziato',
@@ -268,7 +277,11 @@ export default {
 	No_Reactions: 'Nessuna reazione',
 	No_Read_Receipts: 'Nessuna conferma di lettura',
 	Not_logged: 'Non loggato',
+<<<<<<< HEAD
 	Not_RC_Server: 'Questo non è un server di Rocket.Chat.\n{{contact}}',
+=======
+	Not_RC_Server: 'Questo non è un server di OliveUC.\n{{contact}}',
+>>>>>>> olive-develop
 	Nothing: 'Niente',
 	Nothing_to_save: 'Niente da salvare!',
 	Notify_active_in_this_room: 'Notifica solo gli utenti attivi in questa stanza',
@@ -278,7 +291,11 @@ export default {
 	Notification_Preferences: 'Impostazioni notifiche',
 	Offline: 'Offline',
 	Oops: 'Oops!',
+<<<<<<< HEAD
 	Onboarding_title: 'Benvenuto in Rocket.Chat',
+=======
+	Onboarding_title: 'Benvenuto in OliveUC',
+>>>>>>> olive-develop
 	Online: 'Online',
 	Only_authorized_users_can_write_new_messages: 'Solo gli utenti autorizzati possono scrivere nuovi messaggi',
 	Open_emoji_selector: 'Apri selettore emoji',
@@ -441,7 +458,11 @@ export default {
 	Welcome: 'Benvenuto',
 	Whats_your_2fa: 'Qual\'è il tuo codice 2FA?',
 	Without_Servers: 'Senza server',
+<<<<<<< HEAD
 	Write_External_Permission_Message: 'Rocket.Chat ha bisogno dell\'accesso alla galleria per salvare le immagini.',
+=======
+	Write_External_Permission_Message: 'OliveUC ha bisogno dell\'accesso alla galleria per salvare le immagini.',
+>>>>>>> olive-develop
 	Write_External_Permission: 'Permesso galleria',
 	Yes_action_it: 'Sì, {{action}}!',
 	Yesterday: 'Ieri',
@@ -452,7 +473,11 @@ export default {
 	you_were_mentioned: 'sei stato menzionato',
 	you: 'tu',
 	You: 'Tu',
+<<<<<<< HEAD
 	You_need_to_access_at_least_one_RocketChat_server_to_share_something: 'Devi accedere ad almeno un server Rocket.Chat prima di condividere qualcosa.',
+=======
+	You_need_to_access_at_least_one_RocketChat_server_to_share_something: 'Devi accedere ad almeno un server OliveUC prima di condividere qualcosa.',
+>>>>>>> olive-develop
 	Your_certificate: 'Il tuo certificato',
 	Your_invite_link_will_expire_after__usesLeft__uses: 'Il tuo link di invito scadrà dopo {{usesLeft}} utilizzi.',
 	Your_invite_link_will_expire_on__date__or_after__usesLeft__uses: 'Il tuo link di invito scadrà il {{date}} oppure dopo {{usesLeft}} utilizzi.',
