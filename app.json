@@ -1,5 +1,8 @@
 {
-  "name": "OliveUC",
-  "share": "ShareOliveUC",
-  "displayName": "OliveUC"
+  "name": "RocketChatRN",
+  "share": "ShareRocketChatRN",
+  "displayName": "RocketChatRN",
+  "server": "https://oliveuc.oliveitky.com",
+  "appGroup": "group.ios.chat.rocket",
+  "appStoreID": ""
 }

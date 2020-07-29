@@ -4,13 +4,9 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as FileSystem from 'expo-file-system';
 import Orientation from 'react-native-orientation-locker';
-import {
-	serverRequest
-} from '../../actions/server';
 
-import { appStart as appStartAction } from '../../actions';
+import { appStart as appStartAction, ROOT_BACKGROUND } from '../../actions/app';
 import I18n from '../../i18n';
 import Button from '../../containers/Button';
 import styles from './styles';
@@ -20,9 +16,9 @@ import { withTheme } from '../../theme';
 import FormContainer, { FormContainerInner } from '../../containers/FormContainer';
 
 class OnboardingView extends React.Component {
-	static navigationOptions = () => ({
-		header: null
-	})
+	static navigationOptions = {
+		headerShown: false
+	};
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -32,13 +28,21 @@ class OnboardingView extends React.Component {
 
 	constructor(props) {
 		super(props);
-		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 		if (!isTablet) {
 			Orientation.lockToPortrait();
 		}
-		this.state = {
-			certificate: null
-		}
+	}
+
+	componentDidMount() {
+		const { navigation } = this.props;
+		this.unsubscribeFocus = navigation.addListener('focus', () => {
+			this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+		});
+		this.unsubscribeBlur = navigation.addListener('blur', () => {
+			if (this.backHandler && this.backHandler.remove) {
+				this.backHandler.remove();
+			}
+		});
 	}
 
 	shouldComponentUpdate(nextProps) {
@@ -50,62 +54,23 @@ class OnboardingView extends React.Component {
 	}
 
 	componentWillUnmount() {
-		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+		if (this.unsubscribeFocus) {
+			this.unsubscribeFocus();
+		}
+		if (this.unsubscribeBlur) {
+			this.unsubscribeBlur();
+		}
 	}
 
 	handleBackPress = () => {
 		const { appStart } = this.props;
-		appStart('background');
+		appStart({ root: ROOT_BACKGROUND });
 		return false;
 	}
 
-	uriToPath = uri => uri.replace('file://', '');
-
-	completeUrl = (url) => {
-		const parsedUrl = parse(url, true);
-		if (parsedUrl.auth.length) {
-			url = parsedUrl.origin;
-		}
-
-		url = url && url.replace(/\s/g, '');
-
-		if (/^(\w|[0-9-_]){3,}$/.test(url)
-			&& /^(htt(ps?)?)|(loca((l)?|(lh)?|(lho)?|(lhos)?|(lhost:?\d*)?)$)/.test(url) === false) {
-			url = `${ url }.rocket.chat`;
-		}
-
-		if (/^(https?:\/\/)?(((\w|[0-9-_])+(\.(\w|[0-9-_])+)+)|localhost)(:\d+)?$/.test(url)) {
-			if (/^localhost(:\d+)?/.test(url)) {
-				url = `http://${ url }`;
-			} else if (/^https?:\/\//.test(url) === false) {
-				url = `https://${ url }`;
-			}
-		}
-
-		return url.replace(/\/+$/, '').replace(/\\/g, '/');
-	}
-
-	connectServer = async () => {
+	connectServer = () => {
 		const { navigation } = this.props;
-		const { certificate } = this.state;
-		const { connectServer } = this.props;
-		let cert = null;
-
-		if (certificate) {
-			const certificatePath = `${ FileSystem.documentDirectory }/${ certificate.name }`;
-			try {
-				await FileSystem.copyAsync({ from: certificate.path, to: certificatePath });
-			} catch (e) {
-				log(e);
-			}
-			cert = {
-				path: this.uriToPath(certificatePath), // file:// isn't allowed by obj-C
-				password: certificate.password
-			};
-		}
-
-		connectServer("https://oliveuc.oliveitky.com", cert);
-		navigation.navigate('LoginView');
+		navigation.navigate('NewServerView');
 	}
 
 	createWorkspace = async() => {
@@ -119,7 +84,7 @@ class OnboardingView extends React.Component {
 	render() {
 		const { theme } = this.props;
 		return (
-			<FormContainer theme={theme}>
+			<FormContainer theme={theme} testID='onboarding-view'>
 				<FormContainerInner>
 					<Image style={styles.onboarding} source={{ uri: 'logo' }} fadeDuration={0} />
 					<Text style={[styles.title, { color: themes[theme].titleText }]}>{I18n.t('Onboarding_title')}</Text>
@@ -127,18 +92,20 @@ class OnboardingView extends React.Component {
 					<Text style={[styles.description, { color: themes[theme].auxiliaryText }]}>{I18n.t('Onboarding_description')}</Text>
 					<View style={styles.buttonsContainer}>
 						<Button
-							title={'Get Started'}
+							title={I18n.t('Onboarding_join_workspace')}
 							type='primary'
 							onPress={this.connectServer}
 							theme={theme}
+							testID='join-workspace'
 						/>
-						{/* <Button
+						<Button
 							title={I18n.t('Create_a_new_workspace')}
 							type='secondary'
 							backgroundColor={themes[theme].chatComponentBackground}
 							onPress={this.createWorkspace}
 							theme={theme}
-						/> */}
+							testID='create-workspace-button'
+						/>
 					</View>
 				</FormContainerInner>
 			</FormContainer>
@@ -147,8 +114,7 @@ class OnboardingView extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-	appStart: root => dispatch(appStartAction(root)),
-	connectServer: (server, certificate) => dispatch(serverRequest(server, certificate))
+	appStart: params => dispatch(appStartAction(params))
 });
 
 export default connect(null, mapDispatchToProps)(withTheme(OnboardingView));

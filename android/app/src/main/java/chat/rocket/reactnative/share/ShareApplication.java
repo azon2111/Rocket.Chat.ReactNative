@@ -1,6 +1,6 @@
-package chat.rocket.reactnative.share;
+package chat.rocket.oliveuc.share;
 
-import chat.rocket.reactnative.BuildConfig;
+import chat.rocket.oliveuc.BuildConfig;
 
 import chat.rocket.SharePackage;
 

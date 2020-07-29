@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "988410683",
-    "firebase_url": "https://oliveucit.firebaseio.com",
-    "project_id": "oliveucit",
-    "storage_bucket": "oliveucit.appspot.com"
+    "project_number": "960282345134",
+    "firebase_url": "https://oliveucchatapp.firebaseio.com",
+    "project_id": "oliveucchatapp",
+    "storage_bucket": "oliveucchatapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:988410683:android:a695064525e7f194af7d1e",
+        "mobilesdk_app_id": "1:960282345134:android:837104671fcab38155f73f",
         "android_client_info": {
-          "package_name": "com.oliveuc.chatapp"
+          "package_name": "chat.rocket.oliveuc"
         }
       },
       "oauth_client": [
         {
-          "client_id": "988410683-4tc0hae0r7shgv7ecrbqht07ehm4khl8.apps.googleusercontent.com",
+          "client_id": "960282345134-tqvd3ugspeifdq0pj2krbnni5podol0j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDEUPPguuJvGIGVSUIDSxKgC_JhBCU6r4I"
+          "current_key": "AIzaSyBUi6edT9U760VGTR9lpUnymmBqshi979A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "988410683-4tc0hae0r7shgv7ecrbqht07ehm4khl8.apps.googleusercontent.com",
+              "client_id": "960282345134-tqvd3ugspeifdq0pj2krbnni5podol0j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

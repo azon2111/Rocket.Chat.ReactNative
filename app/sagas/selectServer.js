@@ -1,6 +1,4 @@
-import {
-	put, take, takeLatest, fork, cancel, race
-} from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import { Alert } from 'react-native';
 import RNUserDefaults from 'rn-user-defaults';
 import { sanitizedRaw } from '@nozbe/watermelondb/RawRecord';
@@ -8,7 +6,6 @@ import semver from 'semver';
 
 import Navigation from '../lib/Navigation';
 import { SERVER } from '../actions/actionsTypes';
-import * as actions from '../actions';
 import {
 	serverFailure, selectServerRequest, selectServerSuccess, selectServerFailure
 } from '../actions/server';
@@ -21,6 +18,7 @@ import { extractHostname } from '../utils/server';
 import I18n from '../i18n';
 import { SERVERS, TOKEN, SERVER_URL } from '../constants/userDefaults';
 import { BASIC_AUTH_KEY, setBasicAuth } from '../utils/fetch';
+import { appStart, ROOT_INSIDE, ROOT_OUTSIDE } from '../actions/app';
 
 const getServerInfo = function* getServerInfo({ server, raiseError = true }) {
 	try {
@@ -98,14 +96,17 @@ const handleSelectServer = function* handleSelectServer({ server, version, fetch
 		const basicAuth = yield RNUserDefaults.get(`${ BASIC_AUTH_KEY }-${ server }`);
 		setBasicAuth(basicAuth);
 
+		// Check for running requests and abort them before connecting to the server
+		RocketChat.abort();
+
 		if (user) {
 			yield put(clearSettings());
 			yield RocketChat.connect({ server, user, logoutOnError: true });
 			yield put(setUser(user));
-			yield put(actions.appStart('inside'));
+			yield put(appStart({ root: ROOT_INSIDE }));
 		} else {
 			yield RocketChat.connect({ server });
-			yield put(actions.appStart('outside'));
+			yield put(appStart({ root: ROOT_OUTSIDE }));
 		}
 
 		// We can't use yield here because fetch of Settings & Custom Emojis is slower
@@ -141,7 +142,7 @@ const handleServerRequest = function* handleServerRequest({ server, certificate 
 		if (serverInfo) {
 			yield RocketChat.getLoginServices(server);
 			yield RocketChat.getLoginSettings({ server });
-			// Navigation.navigate('WorkspaceView');
+			Navigation.navigate('WorkspaceView');
 			yield put(selectServerRequest(server, serverInfo.version, false));
 		}
 	} catch (e) {
@@ -152,16 +153,6 @@ const handleServerRequest = function* handleServerRequest({ server, certificate 
 
 const root = function* root() {
 	yield takeLatest(SERVER.REQUEST, handleServerRequest);
-
-	while (true) {
-		const params = yield take(SERVER.SELECT_REQUEST);
-		const selectServerTask = yield fork(handleSelectServer, params);
-		yield race({
-			request: take(SERVER.SELECT_REQUEST),
-			success: take(SERVER.SELECT_SUCCESS),
-			failure: take(SERVER.SELECT_FAILURE)
-		});
-		yield cancel(selectServerTask);
-	}
+	yield takeLatest(SERVER.SELECT_REQUEST, handleSelectServer);
 };
 export default root;

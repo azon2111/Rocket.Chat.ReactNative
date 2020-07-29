@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-	View, Linking, ScrollView, AsyncStorage, Switch, Text, Share, Clipboard
+	View, Linking, ScrollView, Switch, Share, Clipboard
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SafeAreaView } from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { logout as logoutAction } from '../../actions/login';
 import { selectServerRequest as selectServerRequestAction } from '../../actions/server';
@@ -13,6 +13,7 @@ import { SWITCH_TRACK_COLOR, themes } from '../../constants/colors';
 import { DrawerButton, CloseModalButton } from '../../containers/HeaderButton';
 import StatusBar from '../../containers/StatusBar';
 import ListItem from '../../containers/ListItem';
+import ItemInfo from '../../containers/ItemInfo';
 import { DisclosureImage } from '../../containers/DisclosureIndicator';
 import Separator from '../../containers/Separator';
 import I18n from '../../i18n';
@@ -24,19 +25,16 @@ import openLink from '../../utils/openLink';
 import scrollPersistTaps from '../../utils/scrollPersistTaps';
 import { showErrorAlert, showConfirmationAlert } from '../../utils/info';
 import styles from './styles';
-import sharedStyles from '../Styles';
 import { loggerConfig, analytics } from '../../utils/log';
 import { PLAY_MARKET_LINK, APP_STORE_LINK, LICENSE_LINK } from '../../constants/links';
 import { withTheme } from '../../theme';
-import { themedHeader } from '../../utils/navigation';
 import SidebarView from '../SidebarView';
-import { withSplit } from '../../split';
-import Navigation from '../../lib/Navigation';
 import { LISTENER } from '../../containers/Toast';
 import EventEmitter from '../../utils/events';
-import { appStart as appStartAction } from '../../actions';
+import { appStart as appStartAction, ROOT_LOADING } from '../../actions/app';
 import { onReviewPress } from '../../utils/review';
 import { getUserSelector } from '../../selectors/login';
+import SafeAreaView from '../../containers/SafeAreaView';
 
 const SectionSeparator = React.memo(({ theme }) => (
 	<View
@@ -53,24 +51,13 @@ SectionSeparator.propTypes = {
 	theme: PropTypes.string
 };
 
-const ItemInfo = React.memo(({ info, theme }) => (
-	<View style={[styles.infoContainer, { backgroundColor: themes[theme].auxiliaryBackground }]}>
-		<Text style={[styles.infoText, { color: themes[theme].infoText }]}>{info}</Text>
-	</View>
-));
-ItemInfo.propTypes = {
-	info: PropTypes.string,
-	theme: PropTypes.string
-};
-
 class SettingsView extends React.Component {
-	static navigationOptions = ({ navigation, screenProps }) => ({
-		...themedHeader(screenProps.theme),
-		headerLeft: screenProps.split ? (
+	static navigationOptions = ({ navigation, isMasterDetail }) => ({
+		headerLeft: () => (isMasterDetail ? (
 			<CloseModalButton navigation={navigation} testID='settings-view-close' />
 		) : (
 			<DrawerButton navigation={navigation} />
-		),
+		)),
 		title: I18n.t('Settings')
 	});
 
@@ -80,11 +67,21 @@ class SettingsView extends React.Component {
 		allowCrashReport: PropTypes.bool,
 		toggleCrashReport: PropTypes.func,
 		theme: PropTypes.string,
-		split: PropTypes.bool,
+		isMasterDetail: PropTypes.bool,
 		logout: PropTypes.func.isRequired,
 		selectServerRequest: PropTypes.func,
-		token: PropTypes.string,
+		user: PropTypes.shape({
+			roles: PropTypes.array,
+			statusLivechat: PropTypes.string
+		}),
 		appStart: PropTypes.func
+	}
+
+	get showLivechat() {
+		const { user } = this.props;
+		const { roles } = user;
+
+		return roles?.includes('livechat-agent');
 	}
 
 	handleLogout = () => {
@@ -92,10 +89,7 @@ class SettingsView extends React.Component {
 			message: I18n.t('You_will_be_logged_out_of_this_application'),
 			callToAction: I18n.t('Logout'),
 			onPress: () => {
-				const { logout, split } = this.props;
-				if (split) {
-					Navigation.navigate('RoomView');
-				}
+				const { logout } = this.props;
 				logout();
 			}
 		});
@@ -109,7 +103,7 @@ class SettingsView extends React.Component {
 				const {
 					server: { server }, appStart, selectServerRequest
 				} = this.props;
-				await appStart('loading', I18n.t('Clear_cache_loading'));
+				await appStart({ root: ROOT_LOADING, text: I18n.t('Clear_cache_loading') });
 				await RocketChat.clearCache({ server });
 				await selectServerRequest(server, null, true);
 			}
@@ -130,14 +124,22 @@ class SettingsView extends React.Component {
 		}
 	}
 
+	toggleLivechat = async() => {
+		try {
+			await RocketChat.changeLivechatStatus();
+		} catch {
+			// Do nothing
+		}
+	}
+
 	navigateToScreen = (screen) => {
 		const { navigation } = this.props;
 		navigation.navigate(screen);
 	}
 
 	sendEmail = async() => {
-		const subject = encodeURI('React Native App Support');
-		const email = encodeURI('support@rocket.chat');
+		const subject = encodeURI('OliveUC Support');
+		const email = encodeURI('help@oliveitky.com');
 		const description = encodeURI(`
 			version: ${ getReadableVersion }
 			device: ${ getDeviceModel }
@@ -188,14 +190,22 @@ class SettingsView extends React.Component {
 		);
 	}
 
-	render() {
-		const { server, split, theme } = this.props;
+	renderLivechatSwitch = () => {
+		const { user } = this.props;
+		const { statusLivechat } = user;
 		return (
-			<SafeAreaView
-				style={[sharedStyles.container, { backgroundColor: themes[theme].auxiliaryBackground }]}
-				testID='settings-view'
-				forceInset={{ vertical: 'never' }}
-			>
+			<Switch
+				value={statusLivechat === 'available'}
+				trackColor={SWITCH_TRACK_COLOR}
+				onValueChange={this.toggleLivechat}
+			/>
+		);
+	}
+
+	render() {
+		const { server, isMasterDetail, theme } = this.props;
+		return (
+			<SafeAreaView testID='settings-view' theme={theme}>
 				<StatusBar theme={theme} />
 				<ScrollView
 					{...scrollPersistTaps}
@@ -203,7 +213,7 @@ class SettingsView extends React.Component {
 					showsVerticalScrollIndicator={false}
 					testID='settings-view-list'
 				>
-					{split ? (
+					{isMasterDetail ? (
 						<>
 							<Separator theme={theme} />
 							<SidebarView theme={theme} />
@@ -220,15 +230,15 @@ class SettingsView extends React.Component {
 					) : null}
 
 					<Separator theme={theme} />
-					{/* <ListItem
+					<ListItem
 						title={I18n.t('Contact_us')}
 						onPress={this.sendEmail}
 						showActionIndicator
 						testID='settings-view-contact'
 						right={this.renderDisclosure}
 						theme={theme}
-					/> */}
-					{/* <Separator theme={theme} /> */}
+					/>
+					<Separator theme={theme} />
 					<ListItem
 						title={I18n.t('Language')}
 						onPress={() => this.navigateToScreen('LanguageView')}
@@ -237,7 +247,7 @@ class SettingsView extends React.Component {
 						right={this.renderDisclosure}
 						theme={theme}
 					/>
-					<Separator theme={theme} />
+					{/*<Separator theme={theme} />
 					<ListItem
 						title={I18n.t('Review_this_app')}
 						showActionIndicator
@@ -245,7 +255,7 @@ class SettingsView extends React.Component {
 						testID='settings-view-review-app'
 						right={this.renderDisclosure}
 						theme={theme}
-					/>
+					/>*/}
 					<Separator theme={theme} />
 					<ListItem
 						title={I18n.t('Share_this_app')}
@@ -273,17 +283,25 @@ class SettingsView extends React.Component {
 						right={this.renderDisclosure}
 						theme={theme}
 					/>
+					<Separator theme={theme} />
+					<ListItem
+						title={I18n.t('Screen_lock')}
+						showActionIndicator
+						onPress={() => this.navigateToScreen('ScreenLockConfigView')}
+						right={this.renderDisclosure}
+						theme={theme}
+					/>
 
-					<SectionSeparator theme={theme} />
+					{/*<SectionSeparator theme={theme} />
 
-					{/* <ListItem
+					<ListItem
 						title={I18n.t('License')}
 						onPress={this.onPressLicense}
 						showActionIndicator
 						testID='settings-view-license'
 						right={this.renderDisclosure}
 						theme={theme}
-					/> */}
+					/>*/}
 
 					<Separator theme={theme} />
 					<ListItem
@@ -303,6 +321,18 @@ class SettingsView extends React.Component {
 					/>
 
 					<SectionSeparator theme={theme} />
+
+					{this.showLivechat ? (
+						<>
+							<ListItem
+								title={I18n.t('Omnichannel')}
+								testID='settings-view-livechat'
+								right={() => this.renderLivechatSwitch()}
+								theme={theme}
+							/>
+							<SectionSeparator theme={theme} />
+						</>
+					) : null}
 
 					<ListItem
 						title={I18n.t('Send_crash_report')}
@@ -343,15 +373,16 @@ class SettingsView extends React.Component {
 
 const mapStateToProps = state => ({
 	server: state.server,
-	token: getUserSelector(state).token,
-	allowCrashReport: state.crashReport.allowCrashReport
+	user: getUserSelector(state),
+	allowCrashReport: state.crashReport.allowCrashReport,
+	isMasterDetail: state.app.isMasterDetail
 });
 
 const mapDispatchToProps = dispatch => ({
 	logout: () => dispatch(logoutAction()),
 	selectServerRequest: params => dispatch(selectServerRequestAction(params)),
 	toggleCrashReport: params => dispatch(toggleCrashReportAction(params)),
-	appStart: (...params) => dispatch(appStartAction(...params))
+	appStart: params => dispatch(appStartAction(params))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTheme(withSplit(SettingsView)));
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(SettingsView));
